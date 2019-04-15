@@ -77,4 +77,5 @@ WHERE
 ## Run it
 `php index.php`
 
+## Sample output
 ![alt text](data.png "Sample out")
