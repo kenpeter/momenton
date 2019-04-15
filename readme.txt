@@ -64,3 +64,6 @@ ON
     em.id = em_c.descendant
 WHERE 
     em_c.ancestor = 100
+
+
+![alt text](data.png "Sample out")
