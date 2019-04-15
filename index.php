@@ -10,7 +10,9 @@
     function main() {
         connectDb();
 
-        fetch();
+        $id = 150;
+        $res = recurFetch($id, []);
+        print_r($res[1][0]);
     }
     
     function connectDb() {
@@ -30,10 +32,52 @@
         }
     }
 
-    function fetch() {
+    function fetch($id) {
         global $g_conn;
-        $sql = "select * from employee";
-        $res = $g_conn->query($sql)->fetchAll();
-        
-        var_dump($res);
+        $sql = "
+    SELECT 
+        id, name 
+    FROM 
+        employee em
+    JOIN 
+        employee_closure em_c
+    ON 
+        em.id = em_c.descendant
+    WHERE 
+        em_c.ancestor = '$id'
+    ";
+        $data = $g_conn->query($sql)->fetchAll();
+
+        $arr = [];
+        foreach ($data as $row) {
+            $obj = [];
+            $obj['id'] = $row['id'];
+            $obj['name'] = $row['name'];
+            $arr[] = $obj;
+        }
+
+        return $arr;
+    }
+
+    function recurFetch($id) {
+        $arr = fetch($id);
+
+        if(count($arr) <= 1) {
+            return $arr;
+        }
+
+        $tmpArr = [];
+        $target = false;
+        foreach($arr as $item) {
+            $tmpId = $item['id'];
+
+            if($tmpId === $id) {
+                $target = $item;
+                continue;
+            }
+                
+            $tmpArr[] = recurFetch($tmpId);
+        }
+
+        return [$target, $tmpArr];
     }
