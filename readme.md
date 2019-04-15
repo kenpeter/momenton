@@ -1,5 +1,3 @@
-
-
 ## Using mysql database
 username is `root`, password is `password`
 
@@ -76,5 +74,7 @@ WHERE
     em_c.ancestor = 100
 ```
 
+## Run it
+`php index.php`
 
 ![alt text](data.png "Sample out")
